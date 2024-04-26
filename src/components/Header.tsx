@@ -6,7 +6,7 @@ export default function Header() {
 	const { data: session }: any = useSession();
 	return (
 		<header>
-			<nav className="w-full py-6 bg-slate-100 flex items-center px-20 justify-between">
+			<nav className="w-full py-6 shadow-lg bg-slate-100 flex items-center px-20 justify-between">
 				<h1 className="font-bold text-2xl whitespace-nowrap">
 					<Link href="/">Geo Profiler.</Link>
 				</h1>
@@ -20,7 +20,7 @@ export default function Header() {
 					</>
 				) : (
 					<p className="text-black cursor-pointer hover:underline">
-						Admin Dashboard
+						<Link href="/login">Admin Dashboard</Link>
 					</p>
 				)}
 			</nav>
