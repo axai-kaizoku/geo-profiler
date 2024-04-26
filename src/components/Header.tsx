@@ -11,16 +11,19 @@ export default function Header() {
 					<Link href="/">Geo Profiler.</Link>
 				</h1>
 				{session ? (
-					<>
+					<div className="flex gap-8">
+						<p className="text-black cursor-pointer hover:underline">
+							<Link href="/dashboard">Admin Dashboard</Link>
+						</p>
 						<p
 							className="text-black cursor-pointer hover:underline"
 							onClick={() => signOut()}>
 							Logout
 						</p>
-					</>
+					</div>
 				) : (
 					<p className="text-black cursor-pointer hover:underline">
-						<Link href="/login">Admin Dashboard</Link>
+						<Link href="/login">Admin Login</Link>
 					</p>
 				)}
 			</nav>

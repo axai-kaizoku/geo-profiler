@@ -45,18 +45,19 @@ export default function ModalLogin() {
 			setError('');
 		}
 
-		if (res?.ok) {
-			const response = await fetch('/api/update-login', {
-				method: 'POST',
-				body: JSON.stringify(email),
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			});
+		const response = await fetch('/api/update-login', {
+			method: 'POST',
+			body: JSON.stringify({ email }),
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
 
-			if (!response.ok) {
-				throw new Error(`HTTP error! Status: ${response.status}`);
-			}
+		if (response.status !== 200) {
+			throw new Error(`HTTP error! Status: ${response.status}`);
+		}
+
+		if (res?.ok) {
 			router.replace('/dashboard');
 		}
 		router.refresh();

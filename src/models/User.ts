@@ -30,13 +30,4 @@ const userSchema = new Schema({
 	},
 });
 
-userSchema.methods.updateLoggedIn = function () {
-	return this.model('User').findOneAndUpdate(
-		{
-			email: this.email,
-		},
-		{ lastLoggedIn: new Date() },
-	);
-};
-
 export default mongoose.models.User || mongoose.model('User', userSchema);
