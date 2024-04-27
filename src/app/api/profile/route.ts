@@ -1,10 +1,13 @@
 import Profile from '@/models/Profile';
+import { ProfileProps } from '@/types';
 import connect from '@/utils/database';
 import { NextResponse } from 'next/server';
-import fs from 'fs';
 
 export async function GET(request: any) {
 	try {
+		await connect();
+		const profiles = await Profile.find();
+		return Response.json(profiles, { status: 200 });
 	} catch (error: any) {
 		return new NextResponse(error, {
 			status: 500,
@@ -23,10 +26,6 @@ export async function PUT(request: any) {
 			...request.json(),
 		});
 
-		if (photo) {
-			profile.photo.data = fs.readFileSync(photo.path);
-			profile.photo.contentType = photo.type;
-		}
 		profile.updatedAt = new Date();
 		await profile.save();
 		return Response.json({ profile }, { status: 201 });
@@ -37,14 +36,15 @@ export async function PUT(request: any) {
 	}
 }
 
-export async function POST(request: any) {
-	try {
-		// await upload.single('photo')(request);
+// Temporary storage for uploaded files
 
-		const { name, description, address, phone, email, interests, latAndLong } =
-			await request.json();
-		const photo = request.file;
-		await connect();
+export async function POST(request: any) {
+	await connect();
+	const { newProfile } = await request.json();
+
+	try {
+		const email = newProfile.email;
+		const phone = newProfile.phone;
 
 		const existingEmail = await Profile.findOne({ email });
 		const existingPhone = await Profile.findOne({ phone });
@@ -55,28 +55,12 @@ export async function POST(request: any) {
 		if (existingPhone) {
 			return new NextResponse('Phone is already in use', { status: 401 });
 		}
-
-		const newProfile = new Profile({
-			name,
-			description,
-			address,
-			phone,
-			email,
-			interests,
-			latAndLong,
-		});
-
-		if (photo) {
-			newProfile.photo.data = fs.readFileSync(photo.path);
-			newProfile.photo.contentType = photo.mimetype;
-		}
-
-		await newProfile.save();
-		return Response.json({ newProfile }, { status: 201 });
+		const profile = new Profile(newProfile);
+		await profile.save();
+		return Response.json({ profile }, { status: 201 });
 	} catch (error: any) {
-		return new NextResponse(error, {
-			status: 500,
-		});
+		console.error(error);
+		return new NextResponse(error, { status: 500 });
 	}
 }
 

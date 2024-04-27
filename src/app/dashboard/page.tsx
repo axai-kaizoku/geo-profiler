@@ -4,14 +4,22 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { formatDate } from '@/utils/format-date';
 import { Skeleton } from '@/components/ui/skeleton';
-import { UserProps } from '@/types';
+import { ProfileProps, UserProps } from '@/types';
 import AdminProfileCard from '@/components/Admin/AdminProfileCard';
 import AddModal from '@/components/Admin/AddModal';
+import { LoadingProfileCard } from '@/components/ProfileCard';
 
 export default function Dashboard() {
 	const router = useRouter();
 	const { data: session, status: sessionStatus } = useSession();
-	const [user, setUser] = useState<UserProps | null>(null);
+	const [user, setUser] = useState<UserProps>({
+		name: 'Akshay',
+		lastLoggedIn: new Date(),
+		email: '02b3akshay@gmail.com',
+		password: '#$%^$#$#',
+		isAdmin: true,
+		createdAt: new Date(),
+	});
 	const [loading, setLoading] = useState<boolean>(true);
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -24,6 +32,19 @@ export default function Dashboard() {
 			console.error('Error fetching user:', error);
 		}
 	};
+	const [data, setData] = useState<ProfileProps[]>();
+
+	const fetchProfiles = async () => {
+		setLoading(true);
+		const response = await fetch('/api/profile');
+		const profileData = await response.json();
+		setData(profileData);
+		setLoading(false);
+	};
+
+	useEffect(() => {
+		fetchProfiles();
+	}, []);
 
 	const loadUser = async () => {
 		setTimeout(() => {
@@ -53,9 +74,9 @@ export default function Dashboard() {
 					</div>
 				) : (
 					<div>
-						<p>{user!.name}</p>
+						<p>{user.name}</p>
 						<p className="text-xs font-extralight">
-							Last logged: {formatDate(user!.lastLoggedIn)}
+							Last logged: {formatDate(user.lastLoggedIn)}
 						</p>
 					</div>
 				)}
@@ -81,19 +102,17 @@ export default function Dashboard() {
 				/>
 			</div>
 			<div className="w-full py-10 px-20 sm:px-28 md:px-32 lg:px-40">
-				{Array(1, 2, 33, 3).map((_, i) => (
-					<AdminProfileCard
-						src="/pass.png"
-						name="John Deo"
-						desc="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore
-	quod nam est odio possimus quisquam, necessitatibus ex? Illo
-	exercitationem ex sed, nulla ullam voluptatibus atque quia
-	repudiandae! Repellendus, beatae ex.repudiandae! Repellendus, beatae
-	ex."
-						address="Hyd, Telangana"
-						key={i}
-					/>
-				))}
+				{loading
+					? Array(1, 2, 3, 4).map((_, i) => <LoadingProfileCard key={i} />)
+					: data!.map((profile, i) => (
+							<AdminProfileCard
+								photo={profile.photo}
+								name={profile.name}
+								description={profile.description}
+								address={profile.address}
+								key={i}
+							/>
+					  ))}
 			</div>
 		</section>
 	);

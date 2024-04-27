@@ -1,10 +1,14 @@
 import { ReactNode } from 'react';
 
-export interface ProfileCardProps {
-	src: string;
-	name: string;
-	desc: string;
-	address: string;
+export interface ProfileProps {
+	name?: string;
+	address?: string;
+	description?: string;
+	phone?: string;
+	email?: string;
+	interests?: string[];
+	latAndLong?: string[];
+	photo?: string;
 }
 
 export interface ModalProps {

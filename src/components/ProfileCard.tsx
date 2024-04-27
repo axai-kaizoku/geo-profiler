@@ -1,28 +1,30 @@
-import { ProfileCardProps } from '@/types';
+import { ProfileProps } from '@/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export default function ProfileCard({
-	src,
+	photo,
 	name,
-	desc,
+	description,
 	address,
-}: ProfileCardProps) {
+}: ProfileProps) {
 	return (
 		<div className="flex bg-white w-full h-fit lg:h-52 items-center gap-12 justify-between my-4 p-3 rounded-xl md:flex-row flex-col">
 			<div className="pl-4">
 				<Image
-					src={src}
+					src={photo as string}
 					alt="pass-port"
 					width={250}
 					height={250}
-					className="object-contain rounded-full border "
+					className="object-cover rounded-full border "
 				/>
 			</div>
 			<div className="flex flex-col content-between w-full h-fit md:h-40 justify-between">
 				<h3 className="text-xl font-semibold">{name}</h3>
-				<p>{desc.slice(0, desc.lastIndexOf(' ', 130)) + ' ...'}</p>
+				<p>
+					{description!.slice(0, description!.lastIndexOf(' ', 130)) + ' ...'}
+				</p>
 				<div className="flex justify-between flex-col md:flex-row gap-4 md:gap-0 pr-20">
 					<div className="text-slate-500 text-sm">{address}</div>
 					<div className="flex  gap-6">

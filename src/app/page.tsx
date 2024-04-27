@@ -1,15 +1,24 @@
 'use client';
 import ProfileCard, { LoadingProfileCard } from '@/components/ProfileCard';
+import { ProfileProps } from '@/types';
 import { useEffect, useState } from 'react';
 
 export default function Home() {
 	const [loading, setLoading] = useState<boolean>(true);
+	const [data, setData] = useState<ProfileProps[]>();
+
+	const fetchProfiles = async () => {
+		setLoading(true);
+		const response = await fetch('/api/profile');
+		const profileData = await response.json();
+		setData(profileData);
+		setLoading(false);
+	};
+
 	useEffect(() => {
-		setInterval(() => {
-			setLoading(false);
-		}, 2000);
+		fetchProfiles();
 	}, []);
-	const data = [1, 2, 3, 4, 5];
+
 	return (
 		<>
 			<section className="w-full flex justify-center  py-8">
@@ -26,15 +35,13 @@ export default function Home() {
 			<section className="min-h-screen flex justify-center pb-10 w-full">
 				<div className="w-3/4 flex-col h-fit flex">
 					{loading
-						? data.map((_, i) => <LoadingProfileCard key={i} />)
-						: data.map((_, i) => (
+						? Array(1, 2, 3, 4).map((_, i) => <LoadingProfileCard key={i} />)
+						: data!.map((profile, i) => (
 								<ProfileCard
-									src="/pass.png"
-									name="John Deo"
-									desc="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore
-						quod nam est odio possimus quisquam, necessitatibus ex? Illo
-						exer"
-									address="Hyd, Telangana"
+									photo={profile.photo}
+									name={profile.name}
+									description={profile.description}
+									address={profile.address}
 									key={i}
 								/>
 						  ))}

@@ -3,11 +3,81 @@ import { Dialog, Transition } from '@headlessui/react';
 import { AddModalProps } from '@/types';
 import { Fragment, useState } from 'react';
 import Image from 'next/image';
+import validateEmail from '@/utils/email-validate';
+import validateMobile from '@/utils/phone-validate';
+import { UploadButton } from '@/utils/uploadthing';
 
 export default function AddModal({ closeModal, isOpen }: AddModalProps) {
 	const [error, setError] = useState<string>('');
+	const [file, setFile] = useState<string>('asfdasdf');
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
+
+		// Gather form data
+		const name = e.target[0].value;
+		const email = e.target[1].value;
+		const phone = e.target[2].value;
+		const description = e.target[3].value;
+		const profileInterests = e.target[5].value;
+		const address = e.target[6].value;
+		const latAndLong = e.target[7].value;
+		const interests = profileInterests.split(/,\s/);
+		console.log(file);
+
+		// Validate email and phone number
+		if (!validateEmail(email)) {
+			setError('Invalid Email address');
+			return;
+		}
+
+		if (!validateMobile(phone)) {
+			setError('Invalid Phone number');
+			return;
+		}
+
+		if (description.length < 50) {
+			setError('Minimum description should be 100 characters');
+			return;
+		}
+
+		// Construct the profile data without directly including the file
+		const newProfile = {
+			name,
+			description,
+			address,
+			phone,
+			email,
+			interests,
+			latAndLong,
+			photo: file,
+		};
+		console.log(newProfile);
+
+		try {
+			const response = await fetch('/api/profile', {
+				method: 'POST',
+				body: JSON.stringify({ newProfile }),
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			});
+
+			if (response?.status === 400) {
+				setError('Email already in use');
+				return;
+			}
+
+			if (response?.status === 401) {
+				setError('Phone already in use');
+				return;
+			}
+
+			setError('');
+			closeModal();
+		} catch (error: any) {
+			console.error(error);
+			setError('An error occurred. Please try again later.');
+		}
 	};
 
 	return (
@@ -64,29 +134,29 @@ export default function AddModal({ closeModal, isOpen }: AddModalProps) {
 												<div className="w-full md:w-[45%] flex flex-col gap-3">
 													<div>
 														<label
-															htmlFor="loginEmailOrNumber"
+															htmlFor="name"
 															className="block mb-2 text-sm font-medium text-gray-900 ">
 															Name
 														</label>
 														<input
 															type="text"
-															name="loginEmailOrNumber"
-															id="loginEmailOrNumber"
+															name="name"
+															id="name"
 															className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full md:w-4/5 p-2.5"
-															placeholder="name@example.com"
+															placeholder="Eg. John Doe"
 															required
 														/>
 													</div>
 													<div>
 														<label
-															htmlFor="loginEmailOrNumber"
+															htmlFor="loginEmail"
 															className="block mb-2 text-sm font-medium text-gray-900 ">
 															Email
 														</label>
 														<input
 															type="text"
-															name="loginEmailOrNumber"
-															id="loginEmailOrNumber"
+															name="loginEmail"
+															id="loginEmail"
 															className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full md:w-4/5 p-2.5"
 															placeholder="name@example.com"
 															required
@@ -94,14 +164,14 @@ export default function AddModal({ closeModal, isOpen }: AddModalProps) {
 													</div>
 													<div>
 														<label
-															htmlFor="signinPassword"
+															htmlFor="phone"
 															className="block mb-2 text-sm font-medium text-gray-900 ">
 															Phone
 														</label>
 														<input
-															type="password"
-															name="password"
-															id="signinPassword"
+															type="text"
+															name="phone"
+															id="phone"
 															placeholder="9876543210"
 															className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full md:w-4/5 p-2.5"
 															required
@@ -109,60 +179,62 @@ export default function AddModal({ closeModal, isOpen }: AddModalProps) {
 													</div>
 													<div>
 														<label
-															htmlFor="loginEmailOrNumber"
+															htmlFor="description"
 															className="block mb-2 text-sm font-medium text-gray-900 ">
 															Description
 														</label>
 														<textarea
 															name="description"
 															id="description"
+															placeholder="Profile or Summary"
 															className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full md:w-4/5 p-2.5"
 															required></textarea>
 													</div>
 												</div>
-												<div className="w-full md:w-[45%] flex flex-col gap-0">
+												<div className="w-full md:w-[45%] flex flex-col gap-3">
 													<div>
 														<label
-															htmlFor="loginEmailOrNumber"
+															htmlFor="photo"
 															className="block mb-2 text-sm font-medium text-gray-900 ">
 															Photo
 														</label>
-														<input
-															type="file"
-															name="loginEmailOrNumber"
-															id="loginEmailOrNumber"
-															className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full md:w-4/5 p-2"
-															placeholder="name@example.com"
-															required
+														<UploadButton
+															endpoint="imageUploader"
+															onClientUploadComplete={(res) => {
+																setFile(res[0].url);
+															}}
+															onUploadError={(error: Error) => {
+																alert(`ERROR! ${error.message}`);
+															}}
 														/>
 													</div>
 													<div>
 														<label
-															htmlFor="loginEmailOrNumber"
+															htmlFor="interest"
 															className="block mb-2 text-sm font-medium text-gray-900 ">
 															Interests
 														</label>
 														<input
 															type="text"
-															name="loginEmailOrNumber"
-															id="loginEmailOrNumber"
+															name="interest"
+															id="interest"
 															className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full md:w-4/5 p-2.5"
-															placeholder="name@example.com"
+															placeholder="Eg. Music, Cricket"
 															required
 														/>
 													</div>
 													<div>
 														<label
-															htmlFor="loginEmailOrNumber"
+															htmlFor="address"
 															className="block mb-2 text-sm font-medium text-gray-900 ">
 															Address
 														</label>
 														<input
 															type="text"
-															name="loginEmailOrNumber"
-															id="loginEmailOrNumber"
+															name="address"
+															id="address"
 															className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full md:w-4/5 p-2.5"
-															placeholder="name@example.com"
+															placeholder="Eg. Hyderabad, Telangana"
 															required
 														/>
 													</div>
@@ -178,7 +250,7 @@ export default function AddModal({ closeModal, isOpen }: AddModalProps) {
 															name="loginEmailOrNumber"
 															id="loginEmailOrNumber"
 															className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full md:w-4/5 p-2.5"
-															placeholder="name@example.com"
+															placeholder="Eg. -17.8743,78.343790"
 															required
 														/>
 													</div>

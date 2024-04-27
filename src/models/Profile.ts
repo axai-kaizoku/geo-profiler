@@ -8,8 +8,8 @@ const profileSchema = new Schema({
 		required: true,
 	},
 	photo: {
-		type: Buffer,
-		contentType: String,
+		type: String,
+		required: true,
 	},
 	description: {
 		type: String,
