@@ -38,18 +38,12 @@ export default function Home() {
 						? Array(1, 2, 3, 4).map((_, i) => <LoadingProfileCard key={i} />)
 						: data!.map((profile, i) => (
 								<ProfileCard
-									photo={profile.photo}
-									name={profile.name}
-									description={profile.description}
-									address={profile.address}
+									profile={profile}
 									key={i}
 								/>
 						  ))}
 				</div>
 			</section>
-			{/* <div className="p-20">
-				<GoogleMaps address="sircilla" />
-			</div> */}
 		</>
 	);
 }

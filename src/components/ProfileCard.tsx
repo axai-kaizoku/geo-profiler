@@ -1,14 +1,40 @@
+'use client';
 import { ProfileProps } from '@/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Skeleton } from '@/components/ui/skeleton';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
-export default function ProfileCard({
-	photo,
-	name,
-	description,
-	address,
-}: ProfileProps) {
+export default function ProfileCard({ profile }: { profile: ProfileProps }) {
+	const { name, description, address, email, phone, photo, interests } =
+		profile;
+	const searchParams = useSearchParams();
+	const pathname = usePathname();
+	const { replace } = useRouter();
+
+	const handleSummary = (profileId: string) => {
+		const params = new URLSearchParams(searchParams);
+		if (profileId) {
+			params.set('query', profileId);
+		} else {
+			params.delete('query');
+		}
+
+		replace(`${pathname}summary/?${params.toString()}`);
+	};
+
+	const handleDetail = (profileId: string) => {
+		const params = new URLSearchParams(searchParams);
+		if (profileId) {
+			params.set('query', profileId);
+		} else {
+			params.delete('query');
+		}
+
+		replace(`${pathname}profile-detail/?${params.toString()}`);
+	};
+
 	return (
 		<div className="flex bg-white w-full h-fit lg:h-52 items-center gap-12 justify-between my-4 p-3 rounded-xl md:flex-row flex-col">
 			<div className="pl-4">
@@ -30,13 +56,15 @@ export default function ProfileCard({
 					<div className="flex  gap-6">
 						<Link
 							href="/summary"
+							// onClick={() => handleSummary(profile?._id!)}
 							className="rounded-3xl border px-2 py-1.5 text-sm">
 							Summary
 						</Link>
 						<Link
-							href="/detail-map"
+							href="/profile-detail"
+							// onClick={() => handleDetail(profile._id!)}
 							className="rounded-3xl whitespace-nowrap border px-2 py-1.5 text-sm">
-							Map detail
+							Profile Details
 						</Link>
 					</div>
 				</div>

@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 
 export interface ProfileProps {
+	_id?: string;
 	name?: string;
 	address?: string;
 	description?: string;

@@ -9,7 +9,7 @@ import { UploadButton } from '@/utils/uploadthing';
 
 export default function AddModal({ closeModal, isOpen }: AddModalProps) {
 	const [error, setError] = useState<string>('');
-	const [file, setFile] = useState<string>('asfdasdf');
+	const [file, setFile] = useState<string>('');
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
 
@@ -22,7 +22,6 @@ export default function AddModal({ closeModal, isOpen }: AddModalProps) {
 		const address = e.target[6].value;
 		const latAndLong = e.target[7].value;
 		const interests = profileInterests.split(/,\s/);
-		console.log(file);
 
 		// Validate email and phone number
 		if (!validateEmail(email)) {
