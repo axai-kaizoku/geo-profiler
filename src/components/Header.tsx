@@ -6,13 +6,13 @@ export default function Header() {
 	const { data: session }: any = useSession();
 	return (
 		<header>
-			<nav className="w-full py-6 shadow-lg bg-slate-100 flex items-center px-20 justify-between">
-				<h1 className="font-bold text-2xl whitespace-nowrap">
+			<nav className="w-full py-6 shadow-lg bg-slate-100 flex flex-col md:flex-row items-center px-20 justify-between">
+				<h1 className="font-bold text-2xl pb-6 md:pb-0 whitespace-nowrap">
 					<Link href="/">Geo Profiler.</Link>
 				</h1>
 				{session ? (
 					<div className="flex gap-8">
-						<p className="text-black cursor-pointer hover:underline">
+						<p className="text-black whitespace-nowrap cursor-pointer hover:underline">
 							<Link href="/dashboard">Admin Dashboard</Link>
 						</p>
 						<p

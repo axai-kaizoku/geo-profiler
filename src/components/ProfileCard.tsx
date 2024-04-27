@@ -10,20 +10,20 @@ export default function ProfileCard({
 	address,
 }: ProfileCardProps) {
 	return (
-		<div className="flex bg-white w-full h-52 items-center gap-12 justify-between my-4 p-3 rounded-xl">
+		<div className="flex bg-white w-full h-fit lg:h-52 items-center gap-12 justify-between my-4 p-3 rounded-xl md:flex-row flex-col">
 			<div className="pl-4">
 				<Image
 					src={src}
 					alt="pass-port"
-					width={280}
-					height={280}
+					width={250}
+					height={250}
 					className="object-contain rounded-full border "
 				/>
 			</div>
-			<div className="flex flex-col content-between h-40 justify-between">
+			<div className="flex flex-col content-between w-full h-fit md:h-40 justify-between">
 				<h3 className="text-xl font-semibold">{name}</h3>
-				<p>{desc}</p>
-				<div className="flex justify-between pr-20">
+				<p>{desc.slice(0, desc.lastIndexOf(' ', 130)) + ' ...'}</p>
+				<div className="flex justify-between flex-col md:flex-row gap-4 md:gap-0 pr-20">
 					<div className="text-slate-500 text-sm">{address}</div>
 					<div className="flex  gap-6">
 						<Link
@@ -33,7 +33,7 @@ export default function ProfileCard({
 						</Link>
 						<Link
 							href="/detail-map"
-							className="rounded-3xl border px-2 py-1.5 text-sm">
+							className="rounded-3xl whitespace-nowrap border px-2 py-1.5 text-sm">
 							Map detail
 						</Link>
 					</div>
@@ -46,11 +46,11 @@ export default function ProfileCard({
 export const LoadingProfileCard = () => {
 	return (
 		<>
-			<div className="flex bg-white w-full h-52 items-center gap-16 justify-start my-4 p-3 rounded-xl">
+			<div className="flex bg-white w-full h-fit lg:h-52 items-center gap-16 justify-start my-4 p-3 rounded-xl md:flex-row flex-col">
 				<div className="pl-4">
 					<Skeleton className="w-[180px] h-[180px] rounded-[50%]" />
 				</div>
-				<div className="flex flex-col gap-3 content-between h-44 w-full justify-between">
+				<div className="flex flex-col gap-3 content-between  w-full justify-between h-fit md:h-44">
 					<Skeleton className="h-6 w-2/12 rounded-xl" />
 					<Skeleton className="h-32 w-full rounded-xl" />
 					<Skeleton className="h-6 w-full rounded-xl" />

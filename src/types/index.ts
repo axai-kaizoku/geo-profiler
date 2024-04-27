@@ -21,3 +21,8 @@ export interface UserProps {
 	createdAt: Date;
 	lastLoggedIn: Date;
 }
+
+export interface AddModalProps {
+	closeModal: () => void;
+	isOpen: boolean;
+}
