@@ -1,6 +1,6 @@
 # Geo Profiler
 
-A Basic Profiles app specilized in seeing locations of profiles. It has Admin Panel. Admins can login and add, update, delete profiles. Included search Functionality.
+A Basic Profiles app specilized in seeing locations of profiles. It has Admin Panel. Admins can login and add, update, delete profiles. Included search Functionality. This app is responsive. It can be used in Tablet and Mobile screens also.
 
 ## Technologies
 
