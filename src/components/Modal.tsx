@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { Fragment, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-export default function Modal({ children, modalClose }: ModalProps) {
+export default function Modal({ children, modalClose, login }: ModalProps) {
 	const router = useRouter();
 	const [isOpen, setIsOpen] = useState(false);
 	const closeModal = () => {
@@ -47,7 +47,10 @@ export default function Modal({ children, modalClose }: ModalProps) {
 								leave="ease-in duration-200"
 								leaveFrom="opacity-100 scale-100"
 								leaveTo="opacity-0 scale-95">
-								<Dialog.Panel className="w-3/4 p-6 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+								<Dialog.Panel
+									className={`w-3/4 ${
+										login ? 'max-w-lg' : ''
+									} p-6 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl`}>
 									<button
 										type="button"
 										onClick={closeModal}

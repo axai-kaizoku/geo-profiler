@@ -15,6 +15,7 @@ export interface ProfileProps {
 export interface ModalProps {
 	children: ReactNode;
 	modalClose?: (() => void) | undefined;
+	login?: boolean;
 }
 
 export interface UserProps {

@@ -68,7 +68,9 @@ export default function ModalLogin() {
 	return (
 		<>
 			{isModalOpen && (
-				<Modal modalClose={closeModal}>
+				<Modal
+					login={true}
+					modalClose={closeModal}>
 					<div className=" flex flex-col items-center justify-center mx-auto py-8">
 						<div className="w-full bg-white rounded-lg  md:mt-0 sm:max-w-md xl:p-0 ">
 							<div className="p-6 space-y-4 md:space-y-6 sm:p-8">
