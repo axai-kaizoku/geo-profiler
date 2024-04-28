@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 export default function Home() {
 	const [loading, setLoading] = useState<boolean>(true);
 	const [data, setData] = useState<ProfileProps[]>();
+	const [keyword, setKeyword] = useState<string>('');
 
 	const fetchProfiles = async () => {
 		setLoading(true);
@@ -15,9 +16,32 @@ export default function Home() {
 		setLoading(false);
 	};
 
+	const searchProfiles = async (word: string) => {
+		if (word.trim() === '') {
+			fetchProfiles();
+		} else {
+			try {
+				setLoading(true);
+				const response = await fetch(`/api/search-profile/${word}`, {
+					method: 'POST',
+				});
+				const searchData = await response.json();
+				setData(searchData);
+				setLoading(false);
+			} catch (error) {
+				console.log(error);
+				setLoading(false);
+			}
+		}
+	};
+
 	useEffect(() => {
 		fetchProfiles();
 	}, []);
+
+	useEffect(() => {
+		searchProfiles(keyword);
+	}, [keyword]);
 
 	return (
 		<>
@@ -28,6 +52,7 @@ export default function Home() {
 						name="search"
 						id="search"
 						placeholder="Search.."
+						onChange={(e) => setKeyword(e.target.value)}
 						className="p-2 rounded-lg shadow-md border w-full md:w-2/4 focus:outline-none"
 					/>
 				</div>

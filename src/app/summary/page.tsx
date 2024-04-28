@@ -1,5 +1,6 @@
 'use client';
 import GoogleMaps from '@/components/GoogleMaps';
+import { ProfileProps } from '@/types';
 import { useEffect, useState } from 'react';
 
 export default function Summary({
@@ -7,9 +8,7 @@ export default function Summary({
 }: {
 	searchParams: { query: string };
 }) {
-	const [src, setSrc] = useState<string>(
-		'https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=india+()&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed',
-	);
+	const [src, setSrc] = useState<ProfileProps>();
 	const fetchMap = async () => {
 		const id = searchParams.query;
 		const response = await fetch('/api/single-profile', {
@@ -20,14 +19,15 @@ export default function Summary({
 			},
 		});
 		const data = await response.json();
-		setSrc(data.latAndLong);
+		console.log(data);
+		setSrc(data);
 	};
-	// useEffect(() => {
-	// 	fetchMap();
-	// }, []);
+	useEffect(() => {
+		fetchMap();
+	}, []);
 	return (
 		<>
-			<GoogleMaps src={src} />
+			<GoogleMaps src={src?.latAndLong!} />
 			{/* {JSON.stringify(src)} */}
 		</>
 	);

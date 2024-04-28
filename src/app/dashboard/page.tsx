@@ -104,7 +104,8 @@ export default function Dashboard() {
 			<div className="w-full py-10 px-20 sm:px-28 md:px-32 lg:px-40">
 				{loading
 					? Array(1, 2, 3, 4).map((_, i) => <LoadingProfileCard key={i} />)
-					: data!.map((profile, i) => (
+					: data!.length > 0 &&
+					  data!.map((profile, i) => (
 							<AdminProfileCard
 								photo={profile.photo}
 								name={profile.name}

@@ -54,18 +54,18 @@ export default function ProfileCard({ profile }: { profile: ProfileProps }) {
 				<div className="flex justify-between flex-col md:flex-row gap-4 md:gap-0 pr-20">
 					<div className="text-slate-500 text-sm">{address}</div>
 					<div className="flex  gap-6">
-						<Link
-							href="/summary"
-							// onClick={() => handleSummary(profile?._id!)}
+						<button
+							// href="/summary"
+							onClick={() => handleSummary(profile?._id!)}
 							className="rounded-3xl border px-2 py-1.5 text-sm">
 							Summary
-						</Link>
-						<Link
-							href="/profile-detail"
-							// onClick={() => handleDetail(profile._id!)}
+						</button>
+						<button
+							// href="/profile-detail"
+							onClick={() => handleDetail(profile._id!)}
 							className="rounded-3xl whitespace-nowrap border px-2 py-1.5 text-sm">
 							Profile Details
-						</Link>
+						</button>
 					</div>
 				</div>
 			</div>

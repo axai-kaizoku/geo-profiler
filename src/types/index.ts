@@ -8,7 +8,7 @@ export interface ProfileProps {
 	phone?: string;
 	email?: string;
 	interests?: string[];
-	latAndLong?: string[];
+	latAndLong?: string;
 	photo?: string;
 }
 
