@@ -23,6 +23,43 @@ export default function Dashboard() {
 	const [loading, setLoading] = useState<boolean>(true);
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 
+	const [keyword, setKeyword] = useState<string>('');
+
+	const fetchProfiles = async () => {
+		setLoading(true);
+		const response = await fetch('/api/profile');
+		const profileData = await response.json();
+		setData(profileData);
+		setLoading(false);
+	};
+
+	const searchProfiles = async (word: string) => {
+		if (word.trim() === '') {
+			fetchProfiles();
+		} else {
+			try {
+				setLoading(true);
+				const response = await fetch(`/api/search-profile/${word}`, {
+					method: 'POST',
+				});
+				const searchData = await response.json();
+				setData(searchData);
+				setLoading(false);
+			} catch (error) {
+				console.log(error);
+				setLoading(false);
+			}
+		}
+	};
+
+	useEffect(() => {
+		fetchProfiles();
+	}, []);
+
+	useEffect(() => {
+		searchProfiles(keyword);
+	}, [keyword]);
+
 	const fetchUser = async () => {
 		try {
 			const res = await fetch('/api/user');
@@ -33,18 +70,6 @@ export default function Dashboard() {
 		}
 	};
 	const [data, setData] = useState<ProfileProps[]>();
-
-	const fetchProfiles = async () => {
-		setLoading(true);
-		const response = await fetch('/api/profile');
-		const profileData = await response.json();
-		setData(profileData);
-		setLoading(false);
-	};
-
-	useEffect(() => {
-		fetchProfiles();
-	}, []);
 
 	const loadUser = async () => {
 		setTimeout(() => {
@@ -89,6 +114,7 @@ export default function Dashboard() {
 					type="search"
 					name="search"
 					id="search"
+					onChange={(e) => setKeyword(e.target.value)}
 					className="p-2 rounded-md border w-2/4 md:w-1/5 focus:outline-none"
 				/>
 				<button

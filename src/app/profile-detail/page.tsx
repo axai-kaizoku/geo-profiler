@@ -2,6 +2,7 @@
 import { Skeleton } from '@/components/ui/skeleton';
 import { ProfileProps } from '@/types';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 export default function ProfileDetail({
@@ -30,6 +31,13 @@ export default function ProfileDetail({
 	}, []);
 	return (
 		<>
+			<div className="flex justify-start pl-4 pt-3 w-full">
+				<Link
+					href="/"
+					className="p-2 border rounded-md">
+					Back
+				</Link>
+			</div>
 			{loading ? (
 				<ProfileDetailSkeleton />
 			) : (

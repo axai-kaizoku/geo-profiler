@@ -1,6 +1,7 @@
 'use client';
 import GoogleMaps from '@/components/GoogleMaps';
 import { ProfileProps } from '@/types';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 export default function Summary({
@@ -19,7 +20,7 @@ export default function Summary({
 			},
 		});
 		const data = await response.json();
-		console.log(data);
+		// console.log(data);
 		setSrc(data);
 	};
 	useEffect(() => {
@@ -27,6 +28,13 @@ export default function Summary({
 	}, []);
 	return (
 		<>
+			<div className="flex justify-start p-4 w-full">
+				<Link
+					href="/"
+					className="p-2 border rounded-md">
+					Back
+				</Link>
+			</div>
 			<GoogleMaps src={src?.latAndLong!} />
 			{/* {JSON.stringify(src)} */}
 		</>
